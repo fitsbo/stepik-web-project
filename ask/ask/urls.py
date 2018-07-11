@@ -17,13 +17,11 @@ from django.contrib import admin
 from django.urls import path
 from qa.views import test
 
-urlpatterns = (patterns('qa.views'),
-    # path('admin/', admin.site.urls),
-    path('login/', views.test, name='login'),
-    path('signup/', views.test, name='signup'),
-    path('question/<:intid>/', views.test, name='question'),
-    path('ask/', views.test, name='ask'),
-    path('popular/', views.test, name='popular'),
-    path('new/', views.test, name=''),
-    path('', views.test, name='home'),
-)
+urlpatterns = [path('login/', test, name='login'),
+               path('signup/', test, name='signup'),
+               path('question/<:intid>/', test, name='question'),
+               path('ask/', test, name='ask'),
+               path('popular/', test, name='popular'),
+               path('new/', test, name=''),
+               path('', test, name='home'),
+               ]
