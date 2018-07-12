@@ -17,11 +17,11 @@ from django.contrib import admin
 from django.urls import path
 from qa.views import test
 
-urlpatterns = [path('login/', test, name='login'),
+urlpatterns = [path('', test, name='home'),
+               path('login/', test, name='login'),
                path('signup/', test, name='signup'),
                path('question/<:intid>/', test, name='question'),
                path('ask/', test, name='ask'),
                path('popular/', test, name='popular'),
                path('new/', test, name=''),
-               path('', test, name='home'),
                ]
