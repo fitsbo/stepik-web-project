@@ -1,0 +1,14 @@
+<html>
+
+<head>QA study app - question {{ question.id }}</head>
+
+<body>
+    <h1>{{ question.title }}</h1>
+    <p>{{ question.text }} </p>
+    {% if answers %} {% for answer in answers %}
+    <p>{{ answer }}</p>
+    {% endfor %} {% endif %}
+
+</body>
+
+</html>
