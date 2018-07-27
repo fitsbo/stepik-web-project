@@ -4,6 +4,7 @@ from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_GET
 from qa.models import Question, Answer
+from qa.forms import AskForm, AnswerForm
 
 
 # shortcut function to secure paginator, not implemented in code
@@ -57,19 +58,26 @@ def popular(request):
     )
 
 
-@require_GET
 def question(request, pk):
-    # question_id = request.GET.get('id', 1)
-    question_page = get_object_or_404(Question, id=pk)
-    try:
-        answers = Answer.objects.filter(question_id=pk)
-    except Answer.DoesNotExist:
-        answers = None
-    return render(request, 'question.html', {
-        'question': question_page,
-        'answers': answers,
-    }
-    )
+    if request.method == 'POST':
+        pass
+    else:
+        question_page = get_object_or_404(Question, id=pk)
+        form = AnswerForm()
+        try:
+            answers = Answer.objects.filter(question_id=pk)
+        except Answer.DoesNotExist:
+            answers = None
+        return render(request, 'question.html', {
+            'question': question_page,
+            'answers': answers,
+            'form': form,
+        }
+        )
+
+
+def ask(request, *args, **kwargs):
+    return HttpResponse('Ok')
 
 
 def test(request, *args, **kwargs):
