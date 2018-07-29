@@ -16,19 +16,22 @@
         <div class="alert alert-danger">{{ e }}</div>
     {% endfor %}
     
-    <form class="form-horizontal" method="post" action="{{ q.get_absolute_url}}">
-        <fieldset>
-            {% for field in form %}
+    <form class="form-horizontal" method="post" action="{{ question.get_absolute_url}}">
+         <fieldset>
+            {% csrf_token %}
             <div class="control-group
-                {% if field.errors %}has-error{% endif %}">
-                <label class="control-label">{{ field.label }}</label>
-                <div class="controls">{{ field }}</div>
+                {% if form.text.errors %}has-error{% endif %}">
+                <label class="control-label">{{ form.text.label }}</label>
+                <div class="controls">{{ form.text }}</div>
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
             </div>
-            {% endfor %}
+
         </fieldset>
         
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <button type="submit" class="btn btn-primary">Save</button>
         </div>
 
     </form>
