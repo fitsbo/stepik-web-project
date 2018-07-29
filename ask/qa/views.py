@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_GET
@@ -58,12 +58,31 @@ def popular(request):
     )
 
 
-def question(request, pk):
+def ask(request):
     if request.method == 'POST':
-        pass
+        form = AskForm(request.POST)
+        if form.is_valid():
+            question = form.save()
+            url = question.get_absolute_url()
+            return HttpResponseRedirect(url)
     else:
-        question_page = get_object_or_404(Question, id=pk)
-        form = AnswerForm()
+        form = AskForm()
+        return render(request, 'ask.html', {
+            'form': form,
+        }
+        )
+
+
+def question(request, pk):
+    question_page = get_object_or_404(Question, id=pk)
+    if request.method == 'POST':
+        form = AnswerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            url = question_page.get_absolute_url()
+            return HttpResponseRedirect(url)
+    else:
+        form = AnswerForm(initial={'question': pk})
         try:
             answers = Answer.objects.filter(question_id=pk)
         except Answer.DoesNotExist:
@@ -74,10 +93,6 @@ def question(request, pk):
             'form': form,
         }
         )
-
-
-def ask(request, *args, **kwargs):
-    return HttpResponse('Ok')
 
 
 def test(request, *args, **kwargs):
