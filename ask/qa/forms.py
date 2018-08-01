@@ -36,7 +36,7 @@ class AnswerForm(forms.Form):
         text = self.cleaned_data['text']
         return text
 
-    def save(self, *args, **kwargs):
+    def save(self):
         answer = Answer(**self.cleaned_data)
         answer.save()
         return answer

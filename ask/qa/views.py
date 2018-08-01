@@ -81,6 +81,18 @@ def question(request, pk):
             form.save()
             url = question_page.get_absolute_url()
             return HttpResponseRedirect(url)
+        else:
+            form.cleaned_data['question'] = pk
+            try:
+                answers = Answer.objects.filter(question_id=pk)
+            except Answer.DoesNotExist:
+                answers = None
+            return render(request, 'question.html', {
+                'question': question_page,
+                'answers': answers,
+                'form': form,
+            }
+            )
     else:
         form = AnswerForm(initial={'question': pk})
         try:
