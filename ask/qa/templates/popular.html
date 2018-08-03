@@ -1,25 +1,17 @@
-<html>
+{% extends "base.html" %}
 
-<head>QA study app - popular questions</head>
+{% block title %}
+    {{ block.super }} – популярные вопросы
+{% endblock %}
 
-<body>
-    <nav>
-        <ul class="pagination">
-            {% for p in paginator.page_range %} {% if p == page.number %}
-            <li color="active">
-                {% else %}
-                <li>
-                    {% endif %}
-                    <a href="{{ paginator.baseurl }}{{ p }}">{{ p }}</a>
-                </li>
-                {% endfor %}
-        </ul>
+{% block content %}
+    
+    <br><h2>Популярные вопросы</h2><br>
+    
+    {% for q in page.object_list %}
+    <li>
+        <a href="{{q.get_absolute_url}}">{{ q.rating }} - {{ q.title }}</a>
+    </li>
+    {% endfor %}
 
-        {% for q in page.object_list %}
-        <li>
-            <a href="{{q.get_absolute_url}}">{{ q.title }}</a>
-        </li>
-        {% endfor %}
-</body>
-
-</html>
+{% endblock %}

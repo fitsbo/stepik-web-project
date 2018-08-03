@@ -1,25 +1,14 @@
-<html>
+{% extends "base.html" %}
 
-<head>QA study app home page - latest questions</head>
+{% block title %}
+    {{ block.super }} – главная
+{% endblock %}
 
-<body>
-    <nav>
-        <ul class="pagination">
-            {% for p in paginator.page_range %} {% if p == page.number %}
-            <li color="active">
-                {% else %}
-                <li>
-                    {% endif %}
-                    <a href="{{ paginator.baseurl }}{{ p }}">{{ p }}</a>
-                </li>
-                {% endfor %}
-        </ul>
-
-        {% for q in page.object_list %}
-        <li>
-            <a href="{{ q.get_absolute_url}}">{{ q.title }}</a>
-        </li>
-        {% endfor %}
-</body>
-
-</html>
+{% block content %}
+    <br><h2>Последние вопросы</h2><br>
+    {% for q in page.object_list %}
+    <li>
+        <a href="{{ q.get_absolute_url}}">{{ q.pk }} - {{ q.title }}</a> 
+    </li>
+    {% endfor %}
+{% endblock %}

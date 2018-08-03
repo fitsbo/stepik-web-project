@@ -1,15 +1,20 @@
-<html>
+{% extends "base.html" %}
 
-<head>QA study app - question {{ question.id }}</head>
+{% block title %}
+    {{ block.super }} – Вопрос: {{ question.title }}
+{% endblock %}
 
-<body>
-    <h1>{{ question.title }}</h1>
+{% block content %}
+    
+    <br><h2>Задать вопрос</h2><br>
     <p>{{ question.text }} </p>
 
     {% if answers %} {% for answer in answers %}
-    <p>{{ answer }}</p>
-    {% endfor %} {% endif %} {% for e in form.non_field_errors %}
-    <div class="alert alert-danger">{{ e }}</div>
+        <p>{{ answer }}</p>
+    {% endfor %} {% endif %}
+    
+    {% for e in form.non_field_errors %}
+        <div class="alert alert-danger">{{ e }}</div>
     {% endfor %}
 
     <form class="form-horizontal" method="post" action="{{ question.get_absolute_url}}">
@@ -26,6 +31,5 @@
             <button type="submit" class="btn btn-primary">Save</button>
         </div>
     </form>
-</body>
 
-</html>
+{% endblock %}

@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>{% block title %}Q&A{% endblock %}</title>
+        {% block extrahead %}{% endblock %}
+    </head>
+
+    <body>
+
+        {% if paginator %}
+        <ul class="pagination">
+            {% for p in paginator.page_range %}
+            {% if p == page.number %}
+                <li color="active">
+            {% else %}
+                <li>
+            {% endif %}
+                <a href="{{ paginator.baseurl }}{{ p }}">{{ p }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <h1>Вопросы и ответы</h1>
+        {% block content %}{% endblock %}
+    </body>
+</html>
