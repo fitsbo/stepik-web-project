@@ -74,6 +74,16 @@ def ask(request):
 
 
 def question(request, pk):
+    def render_with_answers():
+        try:
+            answers = Answer.objects.filter(question_id=pk)
+        except Answer.DoesNotExist:
+            answers = None
+        return render(request, 'question.html', {
+            'question': question_page,
+            'answers': answers,
+            'form': form,
+        })
     question_page = get_object_or_404(Question, id=pk)
     if request.method == 'POST':
         form = AnswerForm(request.POST)
@@ -83,28 +93,10 @@ def question(request, pk):
             return HttpResponseRedirect(url)
         else:
             form.cleaned_data['question'] = pk
-            try:
-                answers = Answer.objects.filter(question_id=pk)
-            except Answer.DoesNotExist:
-                answers = None
-            return render(request, 'question.html', {
-                'question': question_page,
-                'answers': answers,
-                'form': form,
-            }
-            )
+            return render_with_answers()
     else:
         form = AnswerForm(initial={'question': pk})
-        try:
-            answers = Answer.objects.filter(question_id=pk)
-        except Answer.DoesNotExist:
-            answers = None
-        return render(request, 'question.html', {
-            'question': question_page,
-            'answers': answers,
-            'form': form,
-        }
-        )
+        return render_with_answers()
 
 
 def test(request, *args, **kwargs):
