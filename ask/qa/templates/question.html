@@ -6,11 +6,12 @@
 
 {% block content %}
     
-    <br><h2>Задать вопрос</h2><br>
+    <br><h2>Вопрос: {{ question.title }}</h2><br>
+    <h3>Вопрос задал пользователь {{ question.author }}</h3>
     <p>{{ question.text }} </p>
 
     {% if answers %} {% for answer in answers %}
-        <p>{{ answer }}</p>
+        <p>Ответ пользователя {{ answer.author }}: {{ answer }}</p>
     {% endfor %} {% endif %}
     
     {% for e in form.non_field_errors %}
