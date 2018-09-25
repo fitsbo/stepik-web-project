@@ -19,10 +19,11 @@ from django.urls import path
 from qa import views
 
 urlpatterns = [path('', views.home, name='home'),
-               path('login/', views.test, name='login'),
-               path('signup/', views.test, name='signup'),
                path('question/<int:pk>/', views.question, name='question'),
                path('ask/', views.ask, name='ask'),
                path('popular/', views.popular, name='popular'),
+               path('signup/', views.signup, name='signup'),
+               path('login/', views.login_view, name='login'),
+               path('logout/', views.logout_view, name='logout'),
                path('new/', views.test, name='new'),
                ]

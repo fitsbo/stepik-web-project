@@ -1,13 +1,16 @@
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.core.paginator import Paginator, EmptyPage
-from django.shortcuts import get_object_or_404
-from django.views.decorators.http import require_GET
-from qa.models import Question, Answer
-from qa.forms import AskForm, AnswerForm
+from datetime import datetime, timedelta
 
+from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import EmptyPage, Paginator
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.views.decorators.http import require_GET
+
+from qa.forms import AnswerForm, AskForm, AddUserForm, LoginUserForm
+from qa.models import Answer, Question
 
 # shortcut function to secure paginator, not implemented in code
+
 
 def paginate(request, qs):
     try:
@@ -61,6 +64,7 @@ def popular(request):
 def ask(request):
     if request.method == 'POST':
         form = AskForm(request.POST)
+        form._user = request.user
         if form.is_valid():
             question = form.save()
             url = question.get_absolute_url()
@@ -88,6 +92,7 @@ def question(request, pk):
     if request.method == 'POST':
         form = AnswerForm(request.POST)
         if form.is_valid():
+            form._user = request.user
             form.save()
             url = question_page.get_absolute_url()
             return HttpResponseRedirect(url)
@@ -97,6 +102,47 @@ def question(request, pk):
     else:
         form = AnswerForm(initial={'question': pk})
         return render_with_answers()
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = AddUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            url = request.POST.get('continue', '/')
+            return HttpResponseRedirect(url)
+    else:
+        form = AddUserForm()
+    return render(request, 'signup.html',
+                  {'form': form, }
+                  )
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = LoginUserForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            url = request.POST.get('continue', '/')
+            return HttpResponseRedirect(url)
+    else:
+        form = LoginUserForm()
+    return render(request, 'login.html',
+                  {'form': form, }
+                  )
+
+
+def logout_view(request):
+    logout(request)
+    url = request.POST.get('continue', '/')
+    return HttpResponseRedirect(url)
 
 
 def test(request, *args, **kwargs):
